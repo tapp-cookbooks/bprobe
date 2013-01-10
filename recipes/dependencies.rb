@@ -71,15 +71,6 @@ when "debian"
     action :add
   end
 
-when "windows"
-
-  windows_package "boundary" do
-    source "https://windows-staging.boundary.com/bprobe-current.msi"
-    installer_type :msi
-    options "/l*v bprobe.log /qn /i bprobe-current.msi SECURITYTOKEN=#{node[:boundary][:api][:install_token]}"
-    action :install   
-  end
-
 end
 
 cookbook_file "#{Chef::Config[:file_cache_path]}/cacert.pem" do

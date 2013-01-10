@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-if node[:platform] != "smartos" && node[:boundary][:api][:key]
+if node[:platform] != "smartos" && node[:platform] != "windows" && node[:boundary][:api][:key]
 
   include_recipe "bprobe::dependencies"
 
@@ -72,6 +72,15 @@ if node[:platform] != "smartos" && node[:boundary][:api][:key]
     owner "root"
     group "root"
     notifies :restart, resources(:service => "bprobe")
+  end
+
+elsif node[:platform] == "windows" && node[:boundary][:api][:install_token]
+
+  windows_package "boundary" do
+    source "https://windows-staging.boundary.com/bprobe-current.msi"
+    installer_type :msi
+    options "/l*v bprobe.log SECURITYTOKEN=#{node[:boundary][:api][:install_token]}"
+    action :install   
   end
 
 end
